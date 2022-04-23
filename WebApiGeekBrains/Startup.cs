@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiGeekBrains.Data.InMemory.Model;
 
 namespace WebApiGeekBrains
 {
@@ -27,6 +28,7 @@ namespace WebApiGeekBrains
         {
 
             services.AddControllers();
+            services.AddSingleton<ITemperature,Temperature>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiGeekBrains", Version = "v1" });
