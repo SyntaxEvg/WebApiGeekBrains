@@ -50,7 +50,17 @@ namespace MetricsManager.Controllers
         {
             return Ok(_agentPool.Get());
         }
+        [HttpDelete("unregister")]
+        public IActionResult UnregisterAgent([FromBody] AgentInfo agentInfo)
+        {
+            return Ok();
+        }
 
+        [HttpGet("get_agents")]
+        public IActionResult GetRegisterAgents()
+        {
+            return Ok(_agentPool.Values);
+        }
 
     }
 }

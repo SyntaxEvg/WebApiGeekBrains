@@ -47,7 +47,58 @@ namespace MetricsManagerTests
             IActionResult actionResult = _agentsController.RegisterAgent(agentInfo);
             Assert.IsAssignableFrom<IActionResult>(actionResult);
         }
+        [Fact]
+        public void RegisterAgent_ReturnsOk()
+        {
+            var agentInfo = new AgentInfo();
 
+            var result = _agentsController.RegisterAgent(agentInfo);
+
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+
+        [Fact]
+        public void UnregisterAgent_ReturnsOk()
+        {
+            var agentInfo = new AgentInfo();
+
+            var result = _agentsController.UnregisterAgent(agentInfo);
+
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+
+        [Fact]
+        public void EnableAgentById_ReturnsOk()
+        {
+            var agentId = 1;
+
+            var result = _agentsController.EnableAgentById(agentId);
+
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+
+        [Fact]
+        public void DisableAgentById_ReturnsOk()
+        {
+            var agentId = 1;
+
+            var result = _agentsController.DisableAgentById(agentId);
+
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
+
+
+        [Fact]
+        public void GetRegisterAgents_ReturnsOk()
+        {
+
+            var result = _agentsController.GetRegisterAgents();
+
+            _ = Assert.IsAssignableFrom<IActionResult>(result);
+        }
 
 
     }

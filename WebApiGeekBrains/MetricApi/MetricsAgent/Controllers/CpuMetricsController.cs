@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MetricsManager.Enum;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -14,7 +15,11 @@ namespace MetricsAgent.Controllers
         {
             return Ok();
         }
-
+        [HttpGet("from/{fromTime}/to/{toTime}/percentiles/{percentile}")]
+        public IActionResult GetMetricsByPercentile( [FromRoute] TimeSpan fromTime, [FromRoute] TimeSpan toTime, [FromRoute] Percentile percentile)
+        {
+            return Ok();
+        }
         // TODO: Домашнее задание [Пункт 2]
         // В проект агента сбора метрик добавьте контроллеры для сбора метрик, аналогичные
         // менеджеру сбора метрик.Добавьте методы для получения метрик с агента, доступные по
