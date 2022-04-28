@@ -9,8 +9,9 @@
     <Content Remove="MetricApi\**" />
     <EmbeddedResource Remove="MetricApi\**" />
     <None Remove="MetricApi\**" />
+  </ItemGroup>
 
-	<ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
