@@ -1,34 +1,24 @@
+using System;
 using MetricsManager.Controllers;
 using MetricsManager.Enum;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace MetricsManagerTests
 {
-    public class CpuMetricsManagerTests
+    public class CpuControllerUnitTests
     {
+        private readonly CpuMetricsController _controller;
 
-
-        private CpuMetricsController _cpuMetricsController;
-
-
-        public CpuMetricsManagerTests()
+        public CpuControllerUnitTests()
         {
-            _cpuMetricsController = new CpuMetricsController();
+            var loggerMock = new Mock<ILogger<CpuMetricsController>>();
+
+            _controller = new CpuMetricsController(loggerMock.Object);
         }
 
-        [Fact]
-        public void GetMetricsFromAgent_ReturnOk()
-        {
-            int agentId = 1;
-            TimeSpan fromTime = TimeSpan.FromSeconds(0);
-            TimeSpan toTime = TimeSpan.FromSeconds(100);
-
-            IActionResult result = _cpuMetricsController.GetMetricsFromAgent(agentId, fromTime, toTime);
-
-            Assert.IsAssignableFrom<IActionResult>(result);
-        }
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()
         {
@@ -38,13 +28,13 @@ namespace MetricsManagerTests
             var toTime = TimeSpan.FromSeconds(100);
 
             //Act
-            var result = _cpuMetricsController.GetMetricsFromAgent(agentId, fromTime, toTime);
+            var result = _controller.GetMetricsFromAgent(agentId, fromTime, toTime);
 
             // Assert
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
-
-
+        
+        
         [Theory]
         [InlineData(1, 0, 100, Percentile.Median)]
         [InlineData(1, 0, 100, Percentile.P75)]
@@ -59,25 +49,25 @@ namespace MetricsManagerTests
         {
             var fromTime = TimeSpan.FromSeconds(start);
             var toTime = TimeSpan.FromSeconds(end);
-
-            var result = _cpuMetricsController.GetMetricsByPercentileFromAgent(agentId, fromTime, toTime, percentile);
-
+            
+            var result = _controller.GetMetricsByPercentileFromAgent(agentId, fromTime, toTime, percentile);
+            
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
-
-
+        
+        
         [Fact]
         public void GetMetricsFromAllCluster_ReturnsOk()
         {
             var fromTime = TimeSpan.FromSeconds(0);
             var toTime = TimeSpan.FromSeconds(100);
 
-            var result = _cpuMetricsController.GetMetricsFromAllCluster(fromTime, toTime);
+            var result = _controller.GetMetricsFromAllCluster(fromTime, toTime);
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
-
-
+        
+        
         [Theory]
         [InlineData(0, 100, Percentile.Median)]
         [InlineData(0, 100, Percentile.P75)]
@@ -92,9 +82,10 @@ namespace MetricsManagerTests
             var fromTime = TimeSpan.FromSeconds(start);
             var toTime = TimeSpan.FromSeconds(end);
 
-            var result = _cpuMetricsController.GetMetricsByPercentileFromAllCluster(fromTime, toTime, percentile);
+            var result = _controller.GetMetricsByPercentileFromAllCluster(fromTime, toTime, percentile);
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
     }
+
 }

@@ -1,6 +1,8 @@
 using System;
 using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace MetricsManagerTests
@@ -11,9 +13,11 @@ namespace MetricsManagerTests
 
         public DotNetControllerUnitTests()
         {
-            _controller = new DotNetMetricsController();
+            var loggerMock = new Mock<ILogger<DotNetMetricsController>>();
+            
+            _controller = new DotNetMetricsController(loggerMock.Object);
         }
-
+        
 
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()
@@ -26,7 +30,7 @@ namespace MetricsManagerTests
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
-
+        
 
         [Fact]
         public void GetMetricsFromAllCluster_ReturnsOk()

@@ -1,5 +1,7 @@
-﻿using MetricsManager.Controllers;
+using MetricsManager.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace MetricsManagerTests
@@ -10,9 +12,11 @@ namespace MetricsManagerTests
 
         public RamControllerUnitTests()
         {
-            _controller = new RamMetricsController();
+            var loggerMock = new Mock<ILogger<RamMetricsController>>();
+            
+            _controller = new RamMetricsController(loggerMock.Object);
         }
-
+        
 
         [Fact]
         public void GetMetricsFromAgent_ReturnsOk()
@@ -23,7 +27,7 @@ namespace MetricsManagerTests
 
             _ = Assert.IsAssignableFrom<IActionResult>(result);
         }
-
+        
 
         [Fact]
         public void GetMetricsFromAllCluster_ReturnsOk()

@@ -30,7 +30,12 @@ namespace MetricsManager
         {
 
             services.AddSingleton<AgentPool>();
-
+            //services.AddScoped<ICpuMetricsRepository, CpuMetricsRepository>();
+            //services.AddScoped<IDotNetMetricsRepository, DotNetMetricsRepository>();
+            //services.AddScoped<IHddMetricsRepository, HddMetricsRepository>();
+            //services.AddScoped<INetworkMetricsRepository, NetworkMetricsRepository>();
+            //services.AddScoped<IRamMetricsRepository, RamMetricsRepository>();
+            //services.AddScoped<IDatabaseSettingsProvider, DatabaseSettingsProvider>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

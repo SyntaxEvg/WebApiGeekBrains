@@ -1,6 +1,6 @@
 ﻿using MetricsManager.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MetricsManager.Controllers
 {
@@ -8,59 +8,56 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class AgentsController : ControllerBase
     {
-        private AgentPool _agentPool;
+        private readonly AgentPool _agentsModel;
+        private readonly ILogger<AgentsController> _logger;
 
-        public AgentsController(AgentPool agentPool)
+        public AgentsController(AgentPool agentsModel, ILogger<AgentsController> logger)
         {
-            _agentPool = agentPool;
+            _agentsModel = agentsModel;
+            _logger = logger;
+            _logger.LogDebug(1, "NLog встроен в AgentsController");
         }
+
 
         [HttpPost("register")]
         public IActionResult RegisterAgent([FromBody] AgentInfo agentInfo)
         {
-            if (agentInfo != null)
-            {
-                _agentPool.Add(agentInfo);
-            }
+            _logger.LogInformation(
+                $"Регистрация агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
             return Ok();
         }
-
-        [HttpPut("enable/{agentId}")]
-        public IActionResult EnableAgentById([FromRoute] int agentId)
-        {
-            if (_agentPool.Values.ContainsKey(agentId))
-                _agentPool.Values[agentId].Enable = true;
-            return Ok();
-        }
-
-
-        [HttpPut("disable/{agentId}")]
-        public IActionResult DisableAgentById([FromRoute] int agentId)
-        {
-            if (_agentPool.Values.ContainsKey(agentId))
-                _agentPool.Values[agentId].Enable = false;
-            return Ok();
-        }
-
-        // TODO: Домашнее задание [Пункт 1]
-        // Добавьте метод в контроллер агентов проекта, относящегося к менеджеру метрик, который
-        // позволяет получить список зарегистрированных в системе объектов.
-        [HttpGet("get")]
-        public IActionResult GetAllAgents()
-        {
-            return Ok(_agentPool.Get());
-        }
+        
+        
         [HttpDelete("unregister")]
         public IActionResult UnregisterAgent([FromBody] AgentInfo agentInfo)
         {
+            _logger.LogInformation(
+                $"Снятие регистрации агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
             return Ok();
         }
-
+        
+        
+        [HttpPut("enable/{agentId}")]
+        public IActionResult EnableAgentById([FromRoute] int agentId)
+        {
+            _logger.LogInformation($"Активация агента id:{agentId}");
+            return Ok();
+        }
+        
+        
+        [HttpPut("disable/{agentId}")]
+        public IActionResult DisableAgentById([FromRoute] int agentId)
+        {
+            _logger.LogInformation($"Деактивация агента id:{agentId}");
+            return Ok();
+        }
+        
+        
         [HttpGet("get_agents")]
         public IActionResult GetRegisterAgents()
         {
-            return Ok(_agentPool.Values);
+            _logger.LogInformation($"Запрос данных об агентах");
+            return Ok(_agentsModel.Values);
         }
-
     }
 }
