@@ -1,0 +1,33 @@
+﻿using MetricsAgent.DataAccessLayer;
+using MetricsAgent.Metrics;
+using Quartz;
+using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+
+namespace MetricsAgent.Jobs
+{
+    public class NetworkMetricJob : IJob
+    {
+        private readonly INetworkMetricsRepository _repository;
+        private readonly PerformanceCounter _counter;
+        
+        public NetworkMetricJob(INetworkMetricsRepository repository)
+        {
+            _repository = repository;
+            _counter = new PerformanceCounter("Network Adapter", "Bytes", "Microsoft Kernel Adapter");
+        }
+
+        public Task Execute(IJobExecutionContext context)
+        {
+            //total bytes/s
+            var metrics = Convert.ToInt32(_counter.NextValue());
+            var time = DateTimeOffset.UtcNow;
+            
+            _repository.Create(new NetworkMetric { Time = time, Value = metrics });
+            
+            return Task.CompletedTask;
+        }
+
+    }
+}
