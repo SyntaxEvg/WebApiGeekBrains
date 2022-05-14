@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using MetricsAgent.DataAccessLayer;
 using MetricsAgent.Metrics;
 using MetricsAgent.Requests;
@@ -15,9 +16,11 @@ namespace MetricsAgent.Controllers
     {
         private readonly ILogger<NetworkMetricsController> _logger;
         private readonly INetworkMetricsRepository _repository;
-        
-        public NetworkMetricsController(INetworkMetricsRepository repository, ILogger<NetworkMetricsController> logger)
+        private readonly IMapper _mapper;
+
+        public NetworkMetricsController(IMapper mapper, INetworkMetricsRepository repository, ILogger<NetworkMetricsController> logger)
         {
+            _mapper = mapper;
             _repository = repository;
             _logger = logger;
             _logger.LogInformation(1, "NLog встроен в NetworkMetricsController");
@@ -55,6 +58,8 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
+                response.Metrics.Add(_mapper.Map<NetworkMetricDto>(metric));
+
                 response.Metrics.Add(new NetworkMetricDto
                 {
                     Time = metric.Time, 

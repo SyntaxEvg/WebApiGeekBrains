@@ -14,6 +14,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using MetricsAgent.DataAccessLayer;
+using Quartz.Spi;
+using MetricsAgent.Jobs.JobFactory;
+using Quartz;
+using Quartz.Impl;
+using MetricsAgent.Jobs;
+using MetricsAgent.Jobs.Schedule;
+using MetricsAgent.Services;
+using AutoMapper;
+using Dapper;
 
 namespace MetricsAgent
 {
@@ -36,19 +45,67 @@ namespace MetricsAgent
             var connection = new SQLiteConnection(connectionString);
             connection.Open();
             PrepareSchema(connection);
+           
+            services.AddControllers().AddJsonOptions(options =>
+                    options.JsonSerializerOptions.Converters.Add(new CustomTimeSpanConverter())); ;
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            AddTaskJob(ref services);
             services.AddScoped<INetworkMetricsRepository, NetworkMetricsRepository>();
             services.AddScoped<IRamMetricsRepository, RamMetricsRepository>();
             services.AddScoped<ICpuMetricsRepository, CpuMetricsRepository>();
             services.AddScoped<IDotNetMetricsRepository, DotNetMetricsRepository>();
             services.AddScoped<IHddMetricsRepository, HddMetricsRepository>();
             services.AddScoped<IDatabaseSettingsProvider, DatabaseSettingsProvider>();
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                    options.JsonSerializerOptions.Converters.Add(new CustomTimeSpanConverter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsAgent", Version = "v1" });
             });
+            //создание и добавление
+            services.AddSingleton(ConfigureMapper(services));
+        }
+
+        /// <summary>
+        /// startzadacha
+        /// </summary>
+        /// <param name="services"></param>
+        private void AddTaskJob(ref IServiceCollection services)
+        {
+            services.AddSingleton<CpuMetricJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(CpuMetricJob),
+                cronExpression: "0/5 * * * * ?")); // запускать каждые 5 секунд
+
+            services.AddSingleton<DotNetMetricJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(DotNetMetricJob),
+                cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<HddMetricJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(HddMetricJob),
+                cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<NetworkMetricJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(NetworkMetricJob),
+                cronExpression: "0/5 * * * * ?"));
+
+            services.AddSingleton<RamMetricJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(RamMetricJob),
+                cronExpression: "0/5 * * * * ?"));
+
+            services.AddHostedService<QuartzHostedService>();
+        }
+
+        private IMapper ConfigureMapper(IServiceCollection services)
+        {
+            var mapperConfiguration = new MapperConfiguration(
+                mp => mp.AddProfile(new MapperProfile()));
+            var mapper = mapperConfiguration.CreateMapper();          
+            SqlMapper.AddTypeHandler(new DateTimeOffsetHandler());
+            return mapper;
         }
 
         private void PrepareSchema(SQLiteConnection connection)

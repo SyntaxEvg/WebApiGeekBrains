@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using MetricsAgent.Controllers;
 using MetricsAgent.DataAccessLayer;
 using MetricsAgent.Metrics;
@@ -15,11 +16,12 @@ namespace MetricsAgentTests
         
         private readonly Mock<IDotNetMetricsRepository> _repositoryMock;
         private readonly Mock<ILogger<DotNetMetricsController>> _loggerMock;
+        private readonly Mock<IMapper> _mapperMock;
         public DotNetControllerUnitTests()
         {
             _repositoryMock = new Mock<IDotNetMetricsRepository>();
             _loggerMock = new Mock<ILogger<DotNetMetricsController>>();
-            _controller = new DotNetMetricsController(_repositoryMock.Object, _loggerMock.Object);
+            _controller = new DotNetMetricsController(_mapperMock.Object, _repositoryMock.Object, _loggerMock.Object);
         }
         [Fact]
         public void Create_ShouldCall_Create_From_Repository()

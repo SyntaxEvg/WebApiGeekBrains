@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using MetricsAgent.Controllers;
 using MetricsAgent.DataAccessLayer;
 using MetricsAgent.Metrics;
@@ -15,13 +16,14 @@ namespace MetricsAgentTests
 
         private readonly Mock<IRamMetricsRepository> _repositoryMock;
         private readonly Mock<ILogger<RamMetricsController>> _loggerMock;
+        private readonly Mock<IMapper> _mapperMock;
 
         public RamControllerUnitTests()
         {
             _repositoryMock = new Mock<IRamMetricsRepository>();
             _loggerMock = new Mock<ILogger<RamMetricsController>>();
-
-            _controller = new RamMetricsController(_repositoryMock.Object, _loggerMock.Object);
+            _mapperMock = new Mock<IMapper>();
+            _controller = new RamMetricsController(_mapperMock.Object, _repositoryMock.Object, _loggerMock.Object);
         }
 
 

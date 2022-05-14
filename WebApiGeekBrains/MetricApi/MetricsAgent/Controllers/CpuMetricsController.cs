@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using MetricsAgent.DataAccessLayer;
 using MetricsAgent.Metrics;
 using MetricsAgent.Requests;
@@ -15,9 +16,10 @@ namespace MetricsAgent.Controllers
     {
         private readonly ILogger<CpuMetricsController> _logger;
         private readonly ICpuMetricsRepository _repository;
-
-        public CpuMetricsController(ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger)
+        private readonly IMapper _mapper;
+        public CpuMetricsController(IMapper mapper, ICpuMetricsRepository repository, ILogger<CpuMetricsController> logger)
         {
+            _mapper = mapper;
             _repository = repository;
             _logger = logger;
             _logger.LogInformation(1, "NLog встроен в CpuMetricsController");
@@ -57,12 +59,13 @@ namespace MetricsAgent.Controllers
 
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new CpuMetricDto
-                {
-                    Time = metric.Time, 
-                    Value = metric.Value, 
-                    Id = metric.Id
-                });
+                response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
+                //response.Metrics.Add(new CpuMetricDto
+                //{
+                //    Time = metric.Time, 
+                //    Value = metric.Value, 
+                //    Id = metric.Id
+                //});
             }
 
             return Ok(response);

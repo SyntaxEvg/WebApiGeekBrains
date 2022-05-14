@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using MetricsAgent.Controllers;
 using MetricsAgent.DataAccessLayer;
 using MetricsAgent.Metrics;
@@ -14,13 +15,16 @@ namespace MetricsAgentTests
         private readonly CpuMetricsController _controller;
         private readonly Mock<ICpuMetricsRepository> _repositoryMock;
         private readonly Mock<ILogger<CpuMetricsController>> _loggerMock;
+        private readonly Mock<IMapper> _mapperMock; 
+       
 
         public CpuControllerUnitTests()
         {
             _repositoryMock = new Mock<ICpuMetricsRepository>();
             _loggerMock = new Mock<ILogger<CpuMetricsController>>();
+            _mapperMock = new Mock<IMapper>();
 
-            _controller = new CpuMetricsController(_repositoryMock.Object, _loggerMock.Object);
+            _controller = new CpuMetricsController(_mapperMock.Object,_repositoryMock.Object, _loggerMock.Object );
         }
 
 
