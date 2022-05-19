@@ -26,13 +26,12 @@ namespace MetricsManager.Controllers
                 $"Регистрация агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
             return Ok();
         }
-        
-        
+              
         [HttpDelete("unregister")]
         public IActionResult UnregisterAgent([FromBody] AgentInfo agentInfo)
         {
             _logger.LogInformation(
-                $"Снятие регистрации агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
+                $"удаление агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
             return Ok();
         }
         

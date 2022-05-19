@@ -30,7 +30,7 @@ namespace MetricsAgent.Controllers
         [HttpPost("create")]
         public IActionResult Create([FromBody] HddMetricCreateRequest request)
         {
-            _logger.LogInformation($"Создается запись с данными Time:{request.Time}; Value:{request.Value}");
+            _logger.LogInformation($"Create Time:{request.Time}; Value:{request.Value}");
 
             _repository.Create(new HddMetric
             {
@@ -47,7 +47,7 @@ namespace MetricsAgent.Controllers
             [FromRoute] DateTimeOffset fromTime,
             [FromRoute] DateTimeOffset toTime)
         {
-            _logger.LogInformation($"Запрос записи From:{fromTime}; To:{toTime}");
+            _logger.LogInformation($"From:{fromTime}; To:{toTime}");
 
             var metrics = _repository.GetByTimePeriod(fromTime, toTime);
 
@@ -59,12 +59,6 @@ namespace MetricsAgent.Controllers
             foreach (var metric in metrics)
             {
                 response.Metrics.Add(_mapper.Map<HddMetricDto>(metric));
-                //response.Metrics.Add(new HddMetricDto
-                //{
-                //    Time = metric.Time, 
-                //    Value = metric.Value, 
-                //    Id = metric.Id
-                //});
             }
 
             return Ok(response);
