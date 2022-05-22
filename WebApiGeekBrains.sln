@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiGeekBrains", "WebApiGeekBrains\WebApiGeekBrains.csproj", "{850A36A6-D5DF-4B0B-94C7-704C239B2D04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiGeekBrains", "WebApiGeekBrains\WebApiGeekBrains.csproj", "{850A36A6-D5DF-4B0B-94C7-704C239B2D04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgent", "WebApiGeekBrains\MetricApi\MetricsAgent\MetricsAgent.csproj", "{78CB5E64-798C-4355-8E47-F83154F2008B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsAgentTests", "WebApiGeekBrains\MetricApi\MetricsAgentTests\MetricsAgentTests.csproj", "{B816601E-50A6-45E7-8748-085C27AEC103}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManager", "WebApiGeekBrains\MetricApi\MetricsManager\MetricsManager.csproj", "{B91FC981-7D1F-47D9-96D6-C232C178CA4D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManagerTests", "WebApiGeekBrains\MetricApi\MetricsManagerTests\MetricsManagerTests.csproj", "{562818E5-0ECF-4512-A69B-B60D681D0491}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NsSwagLib", "NsSwagLib\NsSwagLib.csproj", "{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +27,30 @@ Global
 		{850A36A6-D5DF-4B0B-94C7-704C239B2D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{850A36A6-D5DF-4B0B-94C7-704C239B2D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{850A36A6-D5DF-4B0B-94C7-704C239B2D04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78CB5E64-798C-4355-8E47-F83154F2008B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78CB5E64-798C-4355-8E47-F83154F2008B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78CB5E64-798C-4355-8E47-F83154F2008B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78CB5E64-798C-4355-8E47-F83154F2008B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B816601E-50A6-45E7-8748-085C27AEC103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B816601E-50A6-45E7-8748-085C27AEC103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B816601E-50A6-45E7-8748-085C27AEC103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B816601E-50A6-45E7-8748-085C27AEC103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91FC981-7D1F-47D9-96D6-C232C178CA4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91FC981-7D1F-47D9-96D6-C232C178CA4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91FC981-7D1F-47D9-96D6-C232C178CA4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91FC981-7D1F-47D9-96D6-C232C178CA4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{562818E5-0ECF-4512-A69B-B60D681D0491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{562818E5-0ECF-4512-A69B-B60D681D0491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{562818E5-0ECF-4512-A69B-B60D681D0491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{562818E5-0ECF-4512-A69B-B60D681D0491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
