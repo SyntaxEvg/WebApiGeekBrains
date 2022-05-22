@@ -1,6 +1,11 @@
-﻿using MetricsManager.Models;
+﻿using AutoMapper;
+using MetricsManager.DataAccessLayer.Interfaces;
+using MetricsManager.Models;
+using MetricsManager.Responses;
+using MetricsManager.Responses.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace MetricsManager.Controllers
 {
@@ -8,12 +13,14 @@ namespace MetricsManager.Controllers
     [ApiController]
     public class AgentsController : ControllerBase
     {
-        private readonly AgentPool _agentsModel;
+        private readonly IAgentInfoRepository _managerRepository;
+       // private readonly AgentPool _agentsModel;
         private readonly ILogger<AgentsController> _logger;
-
-        public AgentsController(AgentPool agentsModel, ILogger<AgentsController> logger)
+        private readonly IMapper _mapper;
+        public AgentsController(IAgentInfoRepository managerRepository, ILogger<AgentsController> logger, IMapper mapper)
         {
-            _agentsModel = agentsModel;
+            _mapper = mapper;
+            //_agentsModel = agentsModel;
             _logger = logger;
             _logger.LogDebug(1, "NLog встроен в AgentsController");
         }
@@ -51,12 +58,23 @@ namespace MetricsManager.Controllers
             return Ok();
         }
         
-        
+      
         [HttpGet("get_agents")]
         public IActionResult GetRegisterAgents()
         {
             _logger.LogInformation($"Запрос данных об агентах");
-            return Ok(_agentsModel.Values);
+
+            var agents = _managerRepository.GetAgents();
+
+            var response = new GetAgentsInfoResponse
+            {
+                Agents = new List<AgentInfoDto>()
+            };
+            foreach (var agent in agents)
+            {
+                response.Agents.Add(_mapper.Map<AgentInfoDto>(agent));
+            }
+            return Ok(response);
         }
     }
 }

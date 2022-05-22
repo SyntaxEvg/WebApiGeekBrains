@@ -30,6 +30,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dapper;
 using MetricsManager.MappingSettings;
+using System.Reflection;
 
 namespace MetricsManager
 {
@@ -49,10 +50,7 @@ namespace MetricsManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddSingleton<AgentPool>();
-          
-           
             services.AddControllers();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
@@ -91,9 +89,41 @@ namespace MetricsManager
             services.AddSingleton<IRamMetricsManagerRepository, RamMetricsRepository>();
             services.AddSingleton<IDatabaseSettingsProvider, DatabaseSettingsProvider>();
 
+            AddHttpClient(services);
+            ConfigureMapper(services);
+            ConfigureMigration(services);
+
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsManager", Version = "v1" });
+                // Поддержка TimeSpan
+                c.MapType<TimeSpan>(() => new OpenApiSchema
+                {
+                    Type = "string",
+                    Example = new OpenApiString("00:00:00")
+                });
+                try
+                {
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    c.IncludeXmlComments(xmlPath);
+                }
+                catch (Exception)
+                {
+
+                   Environment.Exit(1);
+                }
+              
+            });
+           
+        }
+
+        private void AddHttpClient(IServiceCollection services)
+        {
             services.AddHttpClient<ICpuMetricsAgentClient, CpuMetricsAgentClient>()
-                .AddTransientHttpErrorPolicy(p =>
-                    p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
+                 .AddTransientHttpErrorPolicy(p =>
+                     p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
 
             services.AddHttpClient<IDotNetMetricsAgentClient, DotNetMetricsAgentClient>()
                 .AddTransientHttpErrorPolicy(p =>
@@ -110,21 +140,8 @@ namespace MetricsManager
             services.AddHttpClient<IRamMetricsAgentClient, RamMetricsAgentClient>()
                 .AddTransientHttpErrorPolicy(p =>
                     p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(1000)));
-            ConfigureMapper(services);
-            ConfigureMigration(services);
-
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsManager", Version = "v1" });
-                // Поддержка TimeSpan
-                c.MapType<TimeSpan>(() => new OpenApiSchema
-                {
-                    Type = "string",
-                    Example = new OpenApiString("00:00:00")
-                });
-            });
         }
+
         private void ConfigureMigration(IServiceCollection services)
         {
             services.AddFluentMigratorCore()

@@ -48,26 +48,17 @@ namespace MetricsAgent.Controllers
             [FromRoute] DateTimeOffset fromTime,
             [FromRoute] DateTimeOffset toTime)
         {
-            _logger.LogInformation($"Запрос записи From:{fromTime}; To:{toTime}");
+            _logger.LogInformation($"Запрос From:{fromTime}; To:{toTime}");
 
             var metrics = _repository.GetByTimePeriod(fromTime, toTime);
-
             var response = new GetByPeriodCpuMetricsResponse()
             {
                 Metrics = new List<CpuMetricDto>()
             };
-
             foreach (var metric in metrics)
             {
                 response.Metrics.Add(_mapper.Map<CpuMetricDto>(metric));
-                //response.Metrics.Add(new CpuMetricDto
-                //{
-                //    Time = metric.Time, 
-                //    Value = metric.Value, 
-                //    Id = metric.Id
-                //});
             }
-
             return Ok(response);
         }
     }
