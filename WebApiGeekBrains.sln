@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManager", "WebApiGee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetricsManagerTests", "WebApiGeekBrains\MetricApi\MetricsManagerTests\MetricsManagerTests.csproj", "{562818E5-0ECF-4512-A69B-B60D681D0491}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NsSwagLib", "NsSwagLib\NsSwagLib.csproj", "{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AE2A4CB-558A-4B27-A2BC-C89BFDADB7A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FF17F19-ED23-4657-88B2-3CE1DA89BCE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
