@@ -14,8 +14,7 @@ namespace MetricsAgent.Jobs
         
         public DotNetMetricJob(IDotNetMetricsRepository repository)
         {
-            _repository = repository;
-            _counter = new PerformanceCounter( ".NET CLR", "# Bytes in all", "Global");
+            _counter = new PerformanceCounter(".NET CLR Memory", "# Bytes in all heaps", "_Global_");
         }
         public Task Execute(IJobExecutionContext context)
         {
