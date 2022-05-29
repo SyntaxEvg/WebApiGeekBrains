@@ -2,9 +2,10 @@
 
 namespace MetricsManager.Models
 {
-    public class AgentInfo
+    public class AgentInfoDto
     {
-        public int AgentId { get; set; }
+        public int Id { get; set; }
+        public string Address { get; set; }
         public Uri AgentAddress { get; set; }
         public bool Enable { get; set; }
     }

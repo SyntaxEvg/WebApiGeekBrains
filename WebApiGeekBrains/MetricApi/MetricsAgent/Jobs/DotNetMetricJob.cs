@@ -7,6 +7,7 @@ using MetricsAgent.Metrics;
 
 namespace MetricsAgent.Jobs
 {
+    [DisallowConcurrentExecution]
     public class DotNetMetricJob : IJob
     {
         private readonly IDotNetMetricsRepository _repository;
@@ -14,12 +15,15 @@ namespace MetricsAgent.Jobs
         
         public DotNetMetricJob(IDotNetMetricsRepository repository)
         {
-            _counter = new PerformanceCounter(".NET CLR Memory", "# Bytes in all heaps", "_Global_");
+            _repository = repository;
+            _counter = new PerformanceCounter(".NET CLR Memory", "# Bytes in all Heaps", "_Global_");
         }
         public Task Execute(IJobExecutionContext context)
         {
-            //bytes in all heaps
-            var metrics = Convert.ToInt32(_counter.NextValue());
+            //bytes in all heaps'
+            var  r= _counter.NextValue().ToString();
+            float.TryParse(r, out var num);
+            var metrics = num;
             var time = DateTimeOffset.UtcNow;
             
             _repository.Create(new DotNetMetric { Time = time, Value = metrics });

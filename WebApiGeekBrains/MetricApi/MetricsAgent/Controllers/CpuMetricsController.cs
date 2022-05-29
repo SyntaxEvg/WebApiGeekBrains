@@ -22,11 +22,10 @@ namespace MetricsAgent.Controllers
             _mapper = mapper;
             _repository = repository;
             _logger = logger;
-            _logger.LogInformation(1, "NLog встроен в CpuMetricsController");
         }
 
         //TODO: по замечанию create быть не должно
-        //http://localhost:51684/api/metrics/cpu/create
+        ///api/metrics/cpu/create
         //{ "Time": "2021-05-02", "Value": 100 }
         [HttpPost("create")]
         public IActionResult Create([FromBody] CpuMetricCreateRequest request)
@@ -42,11 +41,9 @@ namespace MetricsAgent.Controllers
             return Ok();
         }
 
-        //http://localhost:51684/api/metrics/cpu/from/2021-04-10/to/2021-05-03
+      
         [HttpGet("from/{fromTime}/to/{toTime}")]
-        public IActionResult GetByTimePeriod(
-            [FromRoute] DateTimeOffset fromTime,
-            [FromRoute] DateTimeOffset toTime)
+        public IActionResult GetByTimePeriod([FromRoute] DateTimeOffset fromTime, [FromRoute] DateTimeOffset toTime)
         {
             _logger.LogInformation($"Запрос From:{fromTime}; To:{toTime}");
 

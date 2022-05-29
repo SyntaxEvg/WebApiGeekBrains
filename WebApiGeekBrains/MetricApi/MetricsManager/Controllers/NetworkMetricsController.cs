@@ -16,10 +16,11 @@ namespace MetricsManager.Controllers
         private readonly ILogger<NetworkMetricsController> _logger;
         private readonly IDotNetMetricsManagerRepository _managerRepository;
         private readonly IMapper _mapper;
-        public NetworkMetricsController(ILogger<NetworkMetricsController> logger)
+        public NetworkMetricsController(ILogger<NetworkMetricsController> logger, IDotNetMetricsManagerRepository managerRepository)
         {
-            _logger = logger;
-            _logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
+            _managerRepository = managerRepository;
+             _logger = logger;
+           // _logger.LogDebug(1, "NLog встроен в NetworkMetricsController");
         }
 
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]

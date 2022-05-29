@@ -24,7 +24,7 @@ namespace MetricsManager.Client
         {
             try
             {
-                var generatedClient = new NsSwagLib.Client(request.ClientBaseAddress, _httpClient);
+                var generatedClient = new global::Client.GeneratedManager.Client(request.ClientBaseAddress, _httpClient);
                 var response = generatedClient.ApiMetricsDotnetFromTo(request.FromTime, request.ToTime);
                 var apiResponse = _mapper.Map<GetByPeriodDotNetMetricsApiResponse>(response);
                 return apiResponse;

@@ -17,18 +17,22 @@ namespace MetricsAgent.DataAccessLayer
         public void Create(NetworkMetric item)
         {
             using var connection = new SQLiteConnection(_connectionString);
-            connection.Open();
-            
-            using var cmd = new SQLiteCommand(connection)
             {
-                CommandText = "INSERT INTO networkmetrics(value, time) VALUES(@value, @time)"
-            };
-            
-            cmd.Parameters.AddWithValue("@value", item.Value);
-            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
-            
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+                connection.Open();
+
+                using (var cmd = new SQLiteCommand(connection)
+                { 
+                     CommandText = "INSERT INTO networkmetrics(value, time) VALUES(@value, @time)"
+                }) {
+                    cmd.Parameters.AddWithValue("@value", item.Value);
+                    cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
+
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+
         }
         
         public IList<NetworkMetric> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)

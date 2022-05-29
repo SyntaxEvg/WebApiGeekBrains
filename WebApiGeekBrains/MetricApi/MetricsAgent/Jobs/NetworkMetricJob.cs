@@ -15,7 +15,8 @@ namespace MetricsAgent.Jobs
         public NetworkMetricJob(INetworkMetricsRepository repository)
         {
             _repository = repository;
-            _counter = new PerformanceCounter("Network Adapter", "Bytes", "Microsoft Kernel Adapter");
+            _counter = new PerformanceCounter(
+                "Network Adapter", "Bytes Total/sec", "Microsoft Kernel Debug Network Adapter");
         }
 
         public Task Execute(IJobExecutionContext context)

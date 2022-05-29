@@ -6,8 +6,8 @@ namespace MetricsManager.DataAccessLayer.Interfaces
 {
     public interface IAgentInfoRepository
     {
-        void Create(AgentInfo item);
+        void Create(MetricsManager.Models.AgentInfoDto item);
         void Delete(string url);
-        IList<AgentInfo> GetAgents();
+        IList<MetricsManager.Models.AgentInfoDto> GetAgents();
     }
 }

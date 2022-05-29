@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Threading;
 using MetricsAgent.Metrics;
 
 namespace MetricsAgent.DataAccessLayer
@@ -13,22 +14,37 @@ namespace MetricsAgent.DataAccessLayer
         {
             _connectionString = dbProvider.GetConnectionString();
         }
+
+        public static Semaphore Semaphore = new Semaphore(1, 1);
         
         public void Create(DotNetMetric item)
         {
-            using var connection = new SQLiteConnection(_connectionString);
-            connection.Open();
-            
-            using var cmd = new SQLiteCommand(connection)
+           
+            try
             {
-                CommandText = "INSERT INTO dotnetmetrics(value, time) VALUES(@value, @time)"
-            };
+                Semaphore.WaitOne();
+                using var connection = new SQLiteConnection(_connectionString);
+                connection.Open();
+
+                using var cmd = new SQLiteCommand(connection)
+                {
+                    CommandText = "INSERT INTO dotnetmetrics(value, time) VALUES(@value, @time)"
+                };
+
+                cmd.Parameters.AddWithValue("@value", item.Value);
+                cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
+
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            finally
+            {
+                Semaphore.Release();
+            }
+
             
-            cmd.Parameters.AddWithValue("@value", item.Value);
-            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
+           
             
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
         }
         
         public IList<DotNetMetric> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)

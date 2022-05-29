@@ -21,6 +21,7 @@ namespace MetricsAgent.Jobs
 
         public Task Execute(IJobExecutionContext context)
         {
+            var temp =_counter.NextValue();
             var cpuUsageInPercents = Convert.ToInt32(_counter.NextValue());
             var time = DateTimeOffset.UtcNow;
             _repository.Create(new CpuMetric { Time = time, Value = cpuUsageInPercents });

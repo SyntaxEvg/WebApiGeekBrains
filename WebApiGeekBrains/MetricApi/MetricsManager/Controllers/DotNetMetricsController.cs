@@ -23,7 +23,7 @@ namespace MetricsManager.Controllers
             _managerRepository = managerRepository;
             _mapper = mapper;
             _logger = logger;
-            _logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
+            //_logger.LogDebug(1, "NLog встроен в DotNetMetricsController");
 
         }
 

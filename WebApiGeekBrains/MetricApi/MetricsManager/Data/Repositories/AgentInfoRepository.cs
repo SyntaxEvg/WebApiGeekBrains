@@ -16,31 +16,43 @@ namespace MetricsManager.DataAccessLayer.Repositories
             _connectionString = dbProvider.GetConnectionString;
         }
 
-        public void Create(AgentInfo item)
+        public void Create(MetricsManager.Models.AgentInfoDto item)
         {
+            //$"INSERT INTO {item}(value, time) VALUES(@value, @time)";
+            string add= item.Address;
             using var connection = new SQLiteConnection(_connectionString);
-            connection.Execute("INSERT INTO agents(url) VALUES(@agentUrl)", 
-                new {
-                    agentUrl = item.Url,
-                });
+            connection.Execute("INSERT INTO agents(Address) VALUES(@Address)",
+               new
+               {
+                   Address = item.Address,
+               });
         }
         
         public void Delete(string url)
         {
             using var connection = new SQLiteConnection(_connectionString);
-            connection.Execute("DELETE FROM agents WHERE url=@agentUrl",
+            connection.Execute("DELETE FROM agents WHERE Address=@Address",
                 new
                 {
                     agentUrl = url,
                 });
         }
         
-        public IList<AgentInfo> GetAgents()
+        public IList<MetricsManager.Models.AgentInfoDto> GetAgents()
         {
             using var connection = new SQLiteConnection(_connectionString);
-            return connection
-                .Query<AgentInfo>("SELECT id, url FROM agents")
+            try
+            {
+                return connection
+                .Query<MetricsManager.Models.AgentInfoDto>("SELECT id, Address FROM agents")
                 .ToList();
+            }
+            catch (System.Exception)
+            {
+
+                return new List<MetricsManager.Models.AgentInfoDto>();
+            }
+            
         }
     }
 }

@@ -16,9 +16,10 @@ namespace MetricsManager.Controllers
         private readonly ILogger<RamMetricsController> _logger;
         private readonly IDotNetMetricsManagerRepository _managerRepository;
         private readonly IMapper _mapper;
-        public RamMetricsController(ILogger<RamMetricsController> logger)
+        public RamMetricsController(ILogger<RamMetricsController> logger, IDotNetMetricsManagerRepository managerRepository)
         {
-            _logger = logger;
+            _managerRepository = managerRepository;
+               _logger = logger;
             _logger.LogDebug(1, "NLog встроен в RamMetricsController");
         }
 
@@ -49,7 +50,7 @@ namespace MetricsManager.Controllers
             [FromRoute] DateTimeOffset fromTime,
             [FromRoute] DateTimeOffset toTime)
         {
-            _logger.LogInformation($"Общие данные From:{fromTime}, To:{toTime}");
+            //_logger.LogInformation($"Общие данные From:{fromTime}, To:{toTime}");
 
             var metrics = _managerRepository.GetByTimePeriod(fromTime, toTime);
 

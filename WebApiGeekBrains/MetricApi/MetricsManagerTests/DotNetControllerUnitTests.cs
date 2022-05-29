@@ -11,37 +11,37 @@ namespace MetricsManagerTests
     {
         private readonly DotNetMetricsController _controller;
 
-        public DotNetControllerUnitTests()
-        {
-            var loggerMock = new Mock<ILogger<DotNetMetricsController>>();
+        //public DotNetControllerUnitTests()
+        //{
+        //    var loggerMock = new Mock<ILogger<DotNetMetricsController>>();
             
-            _controller = new DotNetMetricsController(loggerMock.Object);
-        }
+        //    _controller = new DotNetMetricsController(loggerMock.Object);
+        //}
         
 
-        [Fact]
-        public void GetMetricsFromAgent_ReturnsOk()
-        {
-            var agentId = 1;
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+        //[Fact]
+        //public void GetMetricsFromAgent_ReturnsOk()
+        //{
+        //    var agentId = 1;
+        //    var fromTime = TimeSpan.FromSeconds(0);
+        //    var toTime = TimeSpan.FromSeconds(100);
 
-            var result = _controller.GetMetricsFromAgent(agentId, fromTime, toTime);
+        //    var result = _controller.GetMetricsFromAgent(agentId, fromTime, toTime);
 
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
-        }
+        //    _ = Assert.IsAssignableFrom<IActionResult>(result);
+        //}
         
 
-        [Fact]
-        public void GetMetricsFromAllCluster_ReturnsOk()
-        {
-            var fromTime = TimeSpan.FromSeconds(0);
-            var toTime = TimeSpan.FromSeconds(100);
+        //[Fact]
+        //public void GetMetricsFromAllCluster_ReturnsOk()
+        //{
+        //    var fromTime = TimeSpan.FromSeconds(0);
+        //    var toTime = TimeSpan.FromSeconds(100);
 
-            var result = _controller.GetMetricsFromAllCluster(fromTime, toTime);
+        //    var result = _controller.GetMetricsFromAllCluster(fromTime, toTime);
 
-            _ = Assert.IsAssignableFrom<IActionResult>(result);
-        }
+        //    _ = Assert.IsAssignableFrom<IActionResult>(result);
+        //}
     }
 
 }

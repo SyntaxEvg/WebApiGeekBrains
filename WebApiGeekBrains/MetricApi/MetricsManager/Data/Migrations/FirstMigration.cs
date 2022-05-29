@@ -9,7 +9,7 @@ namespace MetricsManager.DataAccessLayer.Migrations
         {
             Create.Table("agents")
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("url").AsString(300);
+                .WithColumn("Address").AsString(300);
             
             CreateTable("cpumetrics");
             CreateTable("dotnetmetrics");

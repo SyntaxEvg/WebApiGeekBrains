@@ -15,7 +15,7 @@ namespace MetricsAgent.Jobs
         public HddMetricJob(IHddMetricsRepository repository)
         {
             _repository = repository;
-            _counter = new PerformanceCounter("Physical_Disk", "% Disk Time", "_Total");
+            _counter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
         }
 
         public Task Execute(IJobExecutionContext context)

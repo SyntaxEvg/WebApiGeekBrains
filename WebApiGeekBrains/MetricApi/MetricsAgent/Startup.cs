@@ -51,15 +51,16 @@ namespace MetricsAgent
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             AddTaskJob(ref services);
-            services.AddScoped<INetworkMetricsRepository, NetworkMetricsRepository>();
-            services.AddScoped<IRamMetricsRepository, RamMetricsRepository>();
-            services.AddScoped<ICpuMetricsRepository, CpuMetricsRepository>();
-            services.AddScoped<IDotNetMetricsRepository, DotNetMetricsRepository>();
-            services.AddScoped<IHddMetricsRepository, HddMetricsRepository>();
-            services.AddScoped<IDatabaseSettingsProvider, DatabaseSettingsProvider>();
+            services.AddSingleton<INetworkMetricsRepository, NetworkMetricsRepository>();
+            services.AddSingleton<IRamMetricsRepository, RamMetricsRepository>();
+            services.AddSingleton<ICpuMetricsRepository, CpuMetricsRepository>();
+            services.AddSingleton<IDotNetMetricsRepository, DotNetMetricsRepository>();
+            services.AddSingleton<IHddMetricsRepository, HddMetricsRepository>();
+            services.AddSingleton<IDatabaseSettingsProvider, DatabaseSettingsProvider>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsAgent", Version = "v1" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.FirstOrDefault());
             });
             //создание и добавление
             services.AddSingleton(ConfigureMapper(services));
@@ -124,16 +125,19 @@ namespace MetricsAgent
             {
                 // «адаЄм новый текст команды дл€ выполнени€
                 // ”дал€ем таблицу с метриками, если она есть в базе данных
-                command.CommandText = "DROP TABLE IF EXISTS cpumetrics";
-                // ќтправл€ем запрос в базу данных
-                command.ExecuteNonQuery();
-                command.CommandText =
-                    @"CREATE TABLE cpumetrics(id INTEGER
-                    PRIMARY KEY,
-                    value INT, time INT)";
-                command.ExecuteNonQuery();
-                //данные за последние 10 дней
-                //перед запуском нужно выставить текущее число +1 и 10 - 1
+                // ”дал€ем таблицу с метриками, если она есть в базе данных
+                foreach (var item in MetricList)
+                {
+                    command.CommandText = $"DROP TABLE IF EXISTS {item}";
+                    // ќтправл€ем запрос в базу данных
+                    command.ExecuteNonQuery();
+                    command.CommandText =
+                        $"CREATE TABLE {item}(id INTEGER PRIMARY KEY, value INT, time INT)";
+                    command.ExecuteNonQuery();
+                    //данные за последние 10 дней
+                    //перед запуском нужно выставить текущее число +1 и 10 - 1
+                }
+
                 int i = 0;
                 foreach (var item in MetricList)
                 {
@@ -145,7 +149,7 @@ namespace MetricsAgent
                         rnd.Next(0, 100));
                     command.Parameters.AddWithValue(
                         "@time",
-                        DateTimeOffset.Now.ToUnixTimeSeconds() - 86_400 * ++i);
+                        DateTimeOffset.Now.ToUnixTimeSeconds() - 86400 * ++i);
 
                     command.Prepare();
                     command.ExecuteNonQuery();

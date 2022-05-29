@@ -22,17 +22,21 @@ namespace MetricsManager.Controllers
             _managerRepository = managerRepository;
             _mapper = mapper;
             _logger = logger;
-            _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
+           // _logger.LogDebug(1, "NLog встроен в CpuMetricsController");
         }
         [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAgent(
           [FromRoute] int agentId,
-          [FromRoute] DateTimeOffset fromTime,
-          [FromRoute] DateTimeOffset toTime)
+          [FromRoute] string fromTime,
+          [FromRoute] string toTime)
         {
+
+            DateTimeOffset.TryParse(fromTime, out var fromTimeT);
+            DateTimeOffset.TryParse(toTime, out var toTimeT);
+
             _logger.LogInformation($"Агент: {agentId}, From:{fromTime}, To:{toTime}");
 
-            var metrics = _managerRepository.GetByTimePeriodFromAgent(fromTime, toTime, agentId);
+            var metrics = _managerRepository.GetByTimePeriodFromAgent(fromTimeT, toTimeT, agentId);
 
             var response = new GetByPeriodCpuMetricsApiResponse
             {
@@ -48,12 +52,14 @@ namespace MetricsManager.Controllers
         }
         [HttpGet("cluster/from/{fromTime}/to/{toTime}")]
         public IActionResult GetMetricsFromAllCluster(
-           [FromRoute] DateTimeOffset fromTime,
-           [FromRoute] DateTimeOffset toTime)
+           [FromRoute] string fromTime,
+           [FromRoute] string toTime)
         {
+            DateTimeOffset.TryParse(fromTime, out var fromTimeT);
+            DateTimeOffset.TryParse(toTime, out var toTimeT);
             _logger.LogInformation($"Общие данные From:{fromTime}, To:{toTime}");
 
-            var metrics = _managerRepository.GetByTimePeriod(fromTime, toTime);
+            var metrics = _managerRepository.GetByTimePeriod(fromTimeT, toTimeT);
 
             var response = new GetByPeriodCpuMetricsApiResponse
             {
@@ -67,15 +73,17 @@ namespace MetricsManager.Controllers
 
             return Ok(response);
         }
-        [HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
-        public IActionResult GetMetricsFromAgent(
-            [FromRoute] int agentId,
-            [FromRoute] TimeSpan fromTime,
-            [FromRoute] TimeSpan toTime)
-        {
-            _logger.LogInformation($"Агент: {agentId}, From:{fromTime}, To:{toTime}");
-            return Ok();
-        }
+        //[HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}")]
+        //public IActionResult GetMetricsFromAgent(
+        //    [FromRoute] int agentId,
+        //    [FromRoute] string fromTime,
+        //    [FromRoute] string toTime)
+        //{
+        //    TimeSpan.TryParse(fromTime, out var fromTimeT);
+        //    TimeSpan.TryParse(toTime, out var toTimeT);
+        //    _logger.LogInformation($"Агент: {agentId}, From:{fromTimeT}, To:{toTimeT}");
+        //    return Ok();
+        //}
 
         
         //[HttpGet("agent/{agentId}/from/{fromTime}/to/{toTime}/percentiles/{percentile}")]

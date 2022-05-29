@@ -20,25 +20,25 @@ namespace MetricsManager.Controllers
         public AgentsController(IAgentInfoRepository managerRepository, ILogger<AgentsController> logger, IMapper mapper)
         {
             _mapper = mapper;
-            //_agentsModel = agentsModel;
-            _logger = logger;
-            _logger.LogDebug(1, "NLog встроен в AgentsController");
+            _managerRepository = managerRepository;
         }
 
 
         [HttpPost("register")]
-        public IActionResult RegisterAgent([FromBody] AgentInfo agentInfo)
+        public IActionResult RegisterAgent([FromBody] MetricsManager.DataAccessLayer.Models.AgentInfo agentInfo)
         {
-            _logger.LogInformation(
-                $"Регистрация агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
+            _managerRepository.Create(new MetricsManager.Models.AgentInfoDto
+            {
+                Address = agentInfo.Address,
+            });
             return Ok();
         }
               
         [HttpDelete("unregister")]
-        public IActionResult UnregisterAgent([FromBody] AgentInfo agentInfo)
+        public IActionResult UnregisterAgent([FromBody] Models.AgentInfoDto agentInfo)
         {
             _logger.LogInformation(
-                $"удаление агента id:{agentInfo.AgentId}, address:{agentInfo.AgentAddress}");
+                $"удаление агента id:{agentInfo.Id}, address:{agentInfo.AgentAddress}");
             return Ok();
         }
         
@@ -62,19 +62,19 @@ namespace MetricsManager.Controllers
         [HttpGet("get_agents")]
         public IActionResult GetRegisterAgents()
         {
-            _logger.LogInformation($"Запрос данных об агентах");
+            //_logger.LogInformation($"Запрос данных об агентах");
 
             var agents = _managerRepository.GetAgents();
 
             var response = new GetAgentsInfoResponse
             {
-                Agents = new List<AgentInfoDto>()
+                Agents = new List<Responses.DataTransferObjects.AgentInfoDto>()
             };
-            foreach (var agent in agents)
-            {
-                response.Agents.Add(_mapper.Map<AgentInfoDto>(agent));
-            }
-            return Ok(response);
+            //foreach (var agent in agents)
+            //{
+            //    response.Agents.Add(_mapper.Map<Responses.DataTransferObjects.AgentInfoDto>(agent));
+            //}
+            return Ok(agents);
         }
     }
 }

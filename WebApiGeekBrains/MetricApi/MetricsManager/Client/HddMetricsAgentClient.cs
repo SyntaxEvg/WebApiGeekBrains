@@ -24,14 +24,15 @@ namespace MetricsManager.Client
         {
             try
             {
-                var generatedClient = new NsSwagLib.Client(request.ClientBaseAddress, _httpClient);
+                var generatedClient = new global::Client.GeneratedManager.Client(request.ClientBaseAddress, _httpClient);
                 var response = generatedClient.ApiMetricsHddFromTo(request.FromTime, request.ToTime);
                 var apiResponse = _mapper.Map<GetByPeriodHddMetricsApiResponse>(response);
                 return apiResponse;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                return new GetByPeriodHddMetricsApiResponse();
+                //_logger.LogError(ex.Message);
             }
             return null;
         }

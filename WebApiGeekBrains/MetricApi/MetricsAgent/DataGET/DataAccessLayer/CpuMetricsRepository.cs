@@ -16,23 +16,27 @@ namespace MetricsAgent.DataAccessLayer
 
         public void Create(CpuMetric item)
         {
-            using var connection = new SQLiteConnection(_connectionString);
-            connection.Open();
-            // создаем команду
-            using var cmd = new SQLiteCommand(connection)
+            using (var connection = new SQLiteConnection(_connectionString)) 
             {
-                CommandText = "INSERT INTO cpumetrics(value, time) VALUES(@value, @time)"
-            };
-            // добавляем параметры в запрос из нашего объекта
-            cmd.Parameters.AddWithValue("@value", item.Value);
+                connection.Open();
+                // создаем команду
+                using (var cmd = new SQLiteCommand(connection)
+                {
+                    CommandText = "INSERT INTO cpumetrics(value, time) VALUES(@value, @time)"
+                })
+                {
+                    // добавляем параметры в запрос из нашего объекта
+                    cmd.Parameters.AddWithValue("@value", item.Value);
 
-            // в таблице будем хранить время в секундах, потому преобразуем перед записью в секунды
-            // через свойство
-            cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
-            // подготовка команды к выполнению
-            cmd.Prepare();
-            // выполнение команды
-            cmd.ExecuteNonQuery();
+                    // в таблице будем хранить время в секундах, потому преобразуем перед записью в секунды
+                    // через свойство
+                    cmd.Parameters.AddWithValue("@time", item.Time.ToUnixTimeSeconds());
+                    // подготовка команды к выполнению
+                    cmd.Prepare();
+                    // выполнение команды
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
         
         public IList<CpuMetric> GetByTimePeriod(DateTimeOffset from, DateTimeOffset to)

@@ -97,6 +97,7 @@ namespace MetricsManager
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MetricsManager", Version = "v1" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.FirstOrDefault());
                 // Поддержка TimeSpan
                 c.MapType<TimeSpan>(() => new OpenApiSchema
                 {
@@ -105,14 +106,12 @@ namespace MetricsManager
                 });
                 try
                 {
-                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                    var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    c.IncludeXmlComments(xmlPath);
+                    //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                   // var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+                   // c.IncludeXmlComments(xmlPath);
                 }
                 catch (Exception)
                 {
-
-                   Environment.Exit(1);
                 }
               
             });

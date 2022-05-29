@@ -16,7 +16,7 @@ namespace MetricsAgent.Jobs
         public RamMetricJob(IRamMetricsRepository repository)
         {
             _repository = repository;
-            _counter = new PerformanceCounter("Memory", "% Bytes In Use");
+            _counter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
         }
 
         public Task Execute(IJobExecutionContext context)

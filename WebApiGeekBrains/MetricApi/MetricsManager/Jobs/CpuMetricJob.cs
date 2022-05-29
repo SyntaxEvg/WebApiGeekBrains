@@ -36,9 +36,10 @@ namespace MetricsManager.Jobs
                 {
                     FromTime = _managerRepository.GetLastRecordDate(),
                     ToTime = DateTimeOffset.UtcNow,
-                    ClientBaseAddress = item.Url.ToString(),
+                    ClientBaseAddress = item.Address,
                 });
-                foreach (var metric in metrics.Metrics)
+                if (metrics?.Metrics != null)
+                foreach (var metric in metrics?.Metrics)
                 {
                     _managerRepository.Create(new CpuMetric
                     {

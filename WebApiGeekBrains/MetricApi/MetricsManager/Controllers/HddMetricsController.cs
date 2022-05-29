@@ -16,9 +16,10 @@ namespace MetricsManager.Controllers
         private readonly ILogger<HddMetricsController> _logger;
         private readonly IDotNetMetricsManagerRepository _managerRepository;
         private readonly IMapper _mapper;
-        public HddMetricsController(ILogger<HddMetricsController> logger)
+        public HddMetricsController(ILogger<HddMetricsController> logger, IDotNetMetricsManagerRepository managerRepository)
         {
             _logger = logger;
+            _managerRepository = managerRepository;
             _logger.LogDebug(1, "NLog встроен в HddMetricsController");
         }
 
